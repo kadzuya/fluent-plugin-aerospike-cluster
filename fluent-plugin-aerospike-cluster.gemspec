@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency "fluentd"
-  spec.add_runtime_dependency "aerospike", '>= 1.0.0'
+  spec.add_runtime_dependency "aerospike", '>= 1.0.0', '< 2.0.0'
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
