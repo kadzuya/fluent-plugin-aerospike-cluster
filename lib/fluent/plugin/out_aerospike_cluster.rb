@@ -74,7 +74,7 @@ DESC
     end
 
     def client
-      @handler ||= Aerospike::Client.new_many(@hosts, @client_policy)
+      @handler ||= Aerospike::Client.new(@hosts, policy: @client_policy)
     end
 
     def start

@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
 Gem::Specification.new do |spec|
   spec.name          = "fluent-plugin-aerospike-cluster"
-  spec.version       = "0.0.2"
+  spec.version       = "0.0.3"
   spec.authors       = ["kadzuya"]
   spec.email         = ["kadzuya@gmail.com"]
 
@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency "fluentd"
-  spec.add_runtime_dependency "aerospike", '>= 1.0.0', '< 2.0.0'
+  spec.add_runtime_dependency "aerospike", '>= 2.0.0', '< 3.0.0'
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
