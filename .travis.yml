@@ -1,5 +1,14 @@
-sudo: false
 language: ruby
+cache: bundler
 rvm:
-  - 2.0.0
-before_install: gem install bundler -v 1.12.3
+  - 2.0
+  - 2.1
+  - 2.2
+  - 2.3
+
+services:
+  - docker
+
+before_install:
+- docker pull aerospike/aerospike-server
+- docker run -d --name aerospike -p 3000:3000 -p 3001:3001 -p 3002:3002 -p 3003:3003 aerospike/aerospike-server

@@ -4,7 +4,6 @@ require 'pp'
 describe Fluent::AerospikeClusterOutput do
   before(:all) { Fluent::Test.setup }
   let(:driver) {
-    #Fluent::Test::BufferedOutputTestDriver.new(Fluent::AerospikeClusterOutput, tag).configure(config)
     Fluent::Test::BufferedOutputTestDriver.new(Fluent::AerospikeClusterOutput).configure(config)
   }
 
@@ -168,6 +167,77 @@ record_exists_action replace_only
         expect(driver.instance.write_policy.send_key).to eq(false)
         expect(driver.instance.write_policy.expiration).to eq(789)
         expect(driver.instance.write_policy.record_exists_action).to eq(Aerospike::RecordExistsAction::REPLACE_ONLY)
+      end
+    end
+  end
+
+  describe 'write' do
+    let(:record) {
+      {
+        'key1' => Time.now.to_s,
+        'key2' => 'key_2',
+        'str1' => 'string_1',
+        'int1' => 12345,
+        'dec1' => 0.12345,
+      }
+    }
+    context 'when single key' do
+      let(:config) {
+        config = %[
+hosts   127.0.0.1:3000
+timeout 5.0
+connection_queue_size 4
+tend_interval 100
+namespace test
+set test_set
+keys key1
+record_keys str1, int1, dec1, none1
+send_key true
+ttl 10000
+record_exists_action update
+]
+      }
+
+      it 'can write to Aerospike' do
+        driver.emit(record)
+        driver.run
+
+        as = Aerospike::Client.new(driver.instance.hosts[0].name, driver.instance.hosts[0].port)
+        key = Aerospike::Key.new('test', 'test_set', record[driver.instance.keys[0]])
+        res = as.get(key)
+        expect(res.bins['str1']).to eq(record['str1'])
+        expect(res.bins['int1']).to eq(record['int1'])
+        expect(res.bins['dec1']).to eq(record['dec1'])
+      end
+    end
+
+    context 'when multiple keys' do
+      let(:config) {
+        config = %[
+hosts   127.0.0.1:3000
+timeout 5.0
+connection_queue_size 4
+tend_interval 100
+namespace test
+set test_set
+keys key1, key2
+record_keys str1, int1, dec1, none1
+send_key true
+ttl 10000
+record_exists_action update
+]
+      }
+
+      it 'can write to Aerospike' do
+        driver.emit(record)
+        driver.run
+
+        as = Aerospike::Client.new(driver.instance.hosts[0].name, driver.instance.hosts[0].port)
+        key = Aerospike::Key.new('test', 'test_set', driver.instance.keys.map {|col| record[col]} )
+        res = as.get(key)
+        expect(res.bins['str1']).to eq(record['str1'])
+        expect(res.bins['int1']).to eq(record['int1'])
+        expect(res.bins['dec1']).to eq(record['dec1'])
       end
     end
   end
