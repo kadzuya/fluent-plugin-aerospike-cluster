@@ -1,9 +1,14 @@
-# fluent-plugin-aerospike-cluster
+fluent-plugin-aerospike-cluster
+=================================
+
+[![Build Status](https://travis-ci.org/kadzuya/fluent-plugin-aerospike-cluster.svg?branch=master)](https://travis-ci.org/kadzuya/fluent-plugin-aerospike-cluster)
 
 fluent output plugin for aerospike.
 
 
-## Parameters
+
+Parameters
+-----------
 
 param                | type     | value                                                              | default
 ---------------------|----------|--------------------------------------------------------------------|---------------
@@ -19,12 +24,33 @@ keys                 | string   | Keys for key of record.                       
 record_keys          | string   | Keys for Record values. (comma separated)                          |
 send_key             | bool     | Send user defined key in addition to hash digest on a record put.  | true
 ttl                  | integer  | Record ttl seconds. (-1: never expire, 0: default namespace's ttl) | 0
-record_exists_action | string   | Qualify how to handle writes where the record already exists.  update update_only replace replace_only  |
+record_exists_action | string   | Qualify how to handle writes where the record already exists.<br> `update` `update_only` `replace` `replace_only`  |
 
-## Another Parameters
+### Another Parameters
 
 - include_tag_key
 - tag_key
 - include_time_key
 - time_key
 
+#### And more
+
+https://docs.fluentd.org/v0.12/articles/buffer-plugin-overview
+
+
+
+Development
+------------
+
+ruby <= 2.3.4
+
+### Install dependencies
+```
+$ gem install bundler
+$ bundle install --path vendor/bundle
+```
+
+### Run test
+```
+$ bundle exec rake spec
+```
