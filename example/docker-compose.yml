@@ -1,0 +1,8 @@
+version: '3'
+services:
+  fluentd:
+    build: .
+    links:
+      - aerospike1
+  aerospike1:
+    image: "aerospike/aerospike-server"
